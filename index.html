@@ -8,6 +8,7 @@
 /* ============ RESET & BASE ============ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden}
+html,body{height:100dvh}
 body{
   font-family:"Microsoft YaHei","微软雅黑","PingFang SC","Helvetica Neue",Arial,sans-serif;
   background:#0d0d1a;color:#fff;user-select:none;
@@ -74,7 +75,7 @@ input{font-family:inherit;outline:none}
 }
 
 /* ============ SCENES WRAPPER ============ */
-#scenes-wrapper{width:100vw;height:100vh;overflow:hidden;position:relative}
+#scenes-wrapper{width:100vw;height:100vh;height:100dvh;overflow:hidden;position:relative}
 #scenes-track{
   display:flex;height:100%;
   transition:transform .7s var(--ease);
@@ -360,7 +361,7 @@ input{font-family:inherit;outline:none}
 
 /* ============ RESPONSIVE ============ */
 @media (max-width:768px){
-  .scene-content{flex-direction:column !important;gap:1.2rem;padding:1rem 1rem 3rem;width:95%}
+  .scene-content{flex-direction:column !important;gap:1.2rem;padding:1rem 1rem 6rem;width:95%}
   .scene-image{max-height:35vh}
   .big-title{font-size:2.2rem}
   .cover-title{font-size:2.2rem;letter-spacing:2px}
@@ -1344,21 +1345,6 @@ function setupEvents(){
       prev();
     }
   });
-  
-  // touch
-  var touchStartX = 0;
-  var touchEndX = 0;
-  track.addEventListener('touchstart', function(e){
-    touchStartX = e.touches[0].clientX;
-  }, {passive: true});
-  track.addEventListener('touchend', function(e){
-    touchEndX = e.changedTouches[0].clientX;
-    var diff = touchStartX - touchEndX;
-    if(Math.abs(diff) > 50){
-      if(diff > 0) next();
-      else prev();
-    }
-  }, {passive: true});
   
   // sound toggle
   soundToggle.addEventListener('click', toggleSound);

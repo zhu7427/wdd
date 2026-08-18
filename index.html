@@ -742,17 +742,28 @@ var imagePaths = [
   'images/音容宛在.jpg'
 ];
 var loadedCount = 0;
+var preloadImagesArr = []; // keep Image objects alive to prevent GC
 
 function preloadImages(){
   imagePaths.forEach(function(path){
     var img = new Image();
-    img.onload = function(){ onImageLoad(); };
-    img.onerror = function(){ onImageLoad(); };
+    img.onload = function(){ onImageLoad(path); };
+    img.onerror = function(){ onImageLoad(path, true); };
     img.src = path;
+    preloadImagesArr.push(img);
   });
+  // timeout fallback: if loading stalls, proceed anyway after 5s
+  setTimeout(function(){
+    if(loadedCount < imagePaths.length){
+      console.warn('Image preload timed out, proceeding with ' + loadedCount + '/' + imagePaths.length);
+      loadingScreen.classList.add('hide');
+      initScene(0);
+    }
+  }, 5000);
 }
-function onImageLoad(){
+function onImageLoad(path, isErr){
   loadedCount++;
+  if(isErr) console.warn('Failed to load: ' + path);
   var pct = Math.round(loadedCount / imagePaths.length * 100);
   loadingFill.style.width = pct + '%';
   loadingText.textContent = pct + '%';
@@ -1095,6 +1106,9 @@ function initAudio(){
     try{
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }catch(e){ soundEnabled = false; }
+  }
+  if(audioCtx && audioCtx.state === 'suspended'){
+    audioCtx.resume();
   }
 }
 

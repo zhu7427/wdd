@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>再见，王东东！—— 高二十二班集体告别仪式</title>
+<style>
+/* ============ RESET & BASE ============ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden}
+body{
+  font-family:"Microsoft YaHei","微软雅黑","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  background:#0d0d1a;color:#fff;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+input{font-family:inherit;outline:none}
+
+/* ============ CSS VARIABLES ============ */
+:root{
+  --coral:#FF6B6B;
+  --teal:#4ECDC4;
+  --gold:#FFD93D;
+  --purple:#A855F7;
+  --dark:#0d0d1a;
+  --light:#f7f7f7;
+  --radius:16px;
+  --ease:cubic-bezier(0.65,0,0.35,1);
+  --bounce:cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+
+/* ============ LOADING SCREEN ============ */
+#loading-screen{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,#0d0d1a,#16213e,#0f3460);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s ease;
+}
+#loading-screen.hide{opacity:0;pointer-events:none}
+.loading-title{font-size:2rem;font-weight:bold;margin-bottom:1.5rem;letter-spacing:2px}
+.loading-sub{font-size:.9rem;color:#aaa;margin-bottom:2rem}
+.loading-bar-wrap{
+  width:240px;height:6px;background:rgba(255,255,255,.15);
+  border-radius:3px;overflow:hidden;
+}
+#loading-fill{
+  width:0%;height:100%;
+  background:linear-gradient(90deg,var(--coral),var(--gold));
+  border-radius:3px;transition:width .3s ease;
+}
+#loading-text{margin-top:1rem;font-size:.8rem;color:#888}
+
+/* ============ SOUND TOGGLE ============ */
+#sound-toggle{
+  position:fixed;top:16px;right:16px;z-index:500;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.12);color:#fff;
+  font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:all .3s ease;backdrop-filter:blur(8px);
+}
+#sound-toggle:hover{background:rgba(255,255,255,.22);transform:scale(1.1)}
+#sound-toggle.muted{opacity:.5}
+
+/* ============ PROGRESS BAR ============ */
+#progress-bar{
+  position:fixed;top:0;left:0;right:0;height:3px;
+  background:rgba(255,255,255,.08);z-index:400;
+}
+#progress-fill{
+  width:0%;height:100%;
+  background:linear-gradient(90deg,var(--coral),var(--gold),var(--teal));
+  transition:width .5s var(--ease);
+}
+
+/* ============ SCENES WRAPPER ============ */
+#scenes-wrapper{width:100vw;height:100vh;overflow:hidden;position:relative}
+#scenes-track{
+  display:flex;height:100%;
+  transition:transform .7s var(--ease);
+  will-change:transform;
+}
+
+/* ============ SCENE BASE ============ */
+.scene{
+  flex:0 0 100%;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.scene-content{
+  display:flex;align-items:center;gap:3rem;
+  max-width:1100px;width:90%;padding:2rem;
+}
+.scene-text-col{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:1rem}
+.scene-image-col{flex-shrink:0;display:flex;align-items:center;justify-content:center}
+
+/* entrance animations */
+.scene-content > *{opacity:0;transform:translateY(40px);transition:all .6s var(--ease)}
+.scene.active .scene-content > *{opacity:1;transform:translateY(0)}
+.scene.active .scene-content > *:nth-child(1){transition-delay:.15s}
+.scene.active .scene-content > *:nth-child(2){transition-delay:.35s}
+.scene.active .scene-content > *:nth-child(3){transition-delay:.55s}
+.scene.active .scene-content > *:nth-child(4){transition-delay:.7s}
+
+/* vertical layout (cover, text-only, ending) */
+.scene-center .scene-content{flex-direction:column;text-align:center;gap:1.5rem}
+.scene-center .scene-text-col{align-items:center}
+
+/* ============ SCENE BACKGROUNDS ============ */
+.scene[data-index="0"]{background:radial-gradient(ellipse at center,#1a1a3e 0%,#0d0d1a 70%)}
+.scene[data-index="1"]{background:linear-gradient(135deg,#1a3a5c,#2d5f8a)}
+.scene[data-index="2"]{background:linear-gradient(135deg,#1a2a3e,#3a1a2e)}
+.scene[data-index="3"]{background:linear-gradient(135deg,#e74c3c,#f39c12)}
+.scene[data-index="4"]{background:radial-gradient(ellipse at center,#5a1010 0%,#1a0a0a 80%)}
+.scene[data-index="5"]{background:linear-gradient(135deg,#2a1808,#5a3010)}
+.scene[data-index="6"]{background:linear-gradient(135deg,#1a3018,#2a4a20)}
+.scene[data-index="7"]{background:radial-gradient(ellipse at center,#1a0a3a 0%,#0a0a1a 80%)}
+.scene[data-index="8"]{background:linear-gradient(135deg,#0a0a0f,#1a1a2a)}
+.scene[data-index="9"]{background:linear-gradient(135deg,#1a3a6a,#3a7ac0)}
+.scene[data-index="10"]{background:linear-gradient(135deg,#3a1a3e,#7a3a1e,#b06020)}
+.scene[data-index="11"]{background:linear-gradient(135deg,#3a1a2a,#6a2a3a)}
+.scene[data-index="12"]{background:#111}
+.scene[data-index="12"].twist{background:linear-gradient(135deg,#2a8a4a,#4ecdc4,#f39c12)}
+.scene[data-index="13"]{background:linear-gradient(135deg,#1a3a3e,#2a5a5e)}
+.scene[data-index="14"]{background:linear-gradient(135deg,#3a0a0a,#6a1a1a)}
+.scene[data-index="15"]{background:radial-gradient(ellipse at center,#1a1a3e 0%,#0d0d1a 70%)}
+
+/* ============ TYPOGRAPHY ============ */
+.scene-title{font-size:2.2rem;font-weight:bold;line-height:1.3}
+.scene-subtitle{font-size:1.1rem;color:rgba(255,255,255,.7);line-height:1.8}
+.scene-desc{font-size:1rem;color:rgba(255,255,255,.6);line-height:1.8;margin-top:.5rem}
+.big-title{font-size:3.5rem;font-weight:bold;letter-spacing:3px;line-height:1.2}
+.big-subtitle{font-size:1.2rem;color:rgba(255,255,255,.7);letter-spacing:2px}
+
+/* ============ IMAGES ============ */
+.scene-image{
+  border-radius:var(--radius);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  max-height:60vh;max-width:100%;
+  object-fit:cover;
+  transition:transform .4s var(--ease),box-shadow .4s ease;
+}
+.scene-image-wrapper{position:relative;cursor:pointer}
+.scene-image-wrapper:hover .scene-image{transform:scale(1.03);box-shadow:0 25px 70px rgba(0,0,0,.6)}
+.scene-image-wrapper::after{
+  content:'';position:absolute;inset:-3px;
+  border-radius:calc(var(--radius) + 3px);
+  background:linear-gradient(135deg,var(--coral),var(--gold),var(--teal));
+  opacity:0;transition:opacity .4s ease;z-index:-1;
+}
+.scene-image-wrapper.revealed::after{opacity:.6}
+
+/* image animations */
+.scene-image.shake{animation:imgShake .5s ease}
+.scene-image.flip{animation:imgFlip .8s var(--bounce)}
+.scene-image.glow{animation:imgGlow 1s ease}
+.scene-image.fly{animation:imgFly 1.5s var(--ease)}
+.scene-image.wave{animation:imgWave .8s ease infinite}
+@keyframes imgShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-2deg)}40%{transform:translateX(8px) rotate(2deg)}60%{transform:translateX(-6px) rotate(-1deg)}80%{transform:translateX(6px) rotate(1deg)}}
+@keyframes imgFlip{0%{transform:rotateY(0)}50%{transform:rotateY(180deg) scale(1.1)}100%{transform:rotateY(360deg)}}
+@keyframes imgGlow{0%,100%{box-shadow:0 20px 60px rgba(0,0,0,.5)}50%{box-shadow:0 20px 80px rgba(168,85,247,.8),0 0 40px rgba(168,85,247,.5)}}
+@keyframes imgFly{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-100px) scale(1.1)}100%{transform:translateY(-200px) scale(1.2);opacity:0}}
+@keyframes imgWave{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+
+/* floating animation */
+.float{animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+
+/* ============ BUTTONS ============ */
+.btn{
+  padding:12px 32px;border-radius:40px;
+  font-size:1rem;font-weight:bold;
+  transition:all .3s var(--ease);
+  backdrop-filter:blur(8px);
+}
+.btn:active{transform:scale(.95)}
+.btn-start{
+  background:linear-gradient(135deg,var(--coral),var(--gold));
+  color:#1a1a1a;font-size:1.15rem;padding:14px 40px;
+  box-shadow:0 8px 30px rgba(255,107,107,.4);
+  animation:pulse 2s ease-in-out infinite;
+}
+.btn-start:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(255,107,107,.6)}
+@keyframes pulse{0%,100%{box-shadow:0 8px 30px rgba(255,107,107,.4)}50%{box-shadow:0 8px 40px rgba(255,217,61,.5)}}
+
+.btn-interaction{
+  background:rgba(255,255,255,.15);color:#fff;
+  border:2px solid rgba(255,255,255,.3);
+  font-size:1rem;
+}
+.btn-interaction:hover{background:rgba(255,255,255,.25);transform:scale(1.05)}
+.btn-interaction:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+.btn-next{
+  background:rgba(255,255,255,.1);color:#fff;
+  border:2px solid rgba(255,255,255,.25);
+  font-size:.95rem;padding:10px 28px;
+}
+.btn-next:hover{background:rgba(255,255,255,.2)}
+.btn-next.hidden{display:none}
+.btn-next.appear{animation:btnAppear .5s var(--bounce)}
+@keyframes btnAppear{0%{opacity:0;transform:scale(.8) translateY(20px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+
+.btn-restart{
+  background:linear-gradient(135deg,var(--teal),var(--coral));
+  color:#1a1a1a;font-size:1.1rem;padding:14px 36px;
+}
+
+/* ============ REACTION TEXT ============ */
+.reaction-text{
+  font-size:1.6rem;font-weight:bold;
+  opacity:0;transform:scale(.7);
+  transition:all .5s var(--bounce);
+  min-height:1.6rem;
+}
+.reaction-text.show{opacity:1;transform:scale(1)}
+
+.fun-fact{
+  font-size:.85rem;color:rgba(255,255,255,.5);
+  font-style:italic;opacity:0;transition:opacity .5s ease .3s;
+}
+.fun-fact.show{opacity:1}
+
+/* ============ PARTICLES ============ */
+.particle{
+  position:fixed;z-index:9998;pointer-events:none;
+  border-radius:50%;
+  transition:all 1.8s var(--ease);
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* floating bg particles */
+.bg-particle{
+  position:absolute;border-radius:50%;background:rgba(255,255,255,.08);
+  pointer-events:none;animation:bgFloat linear infinite;
+}
+@keyframes bgFloat{
+  0%{transform:translateY(100vh) rotate(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(-10vh) rotate(360deg);opacity:0}
+}
+
+/* ============ NAVIGATION ============ */
+.nav-btn{
+  position:fixed;top:50%;transform:translateY(-50%);
+  z-index:300;width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.1);color:#fff;
+  font-size:20px;display:flex;align-items:center;justify-content:center;
+  transition:all .3s ease;backdrop-filter:blur(8px);
+}
+.nav-btn:hover{background:rgba(255,255,255,.22)}
+.nav-btn.hidden{opacity:0;pointer-events:none}
+#nav-prev{left:16px}
+#nav-next{right:16px}
+
+#scene-counter{
+  position:fixed;bottom:16px;right:20px;z-index:300;
+  font-size:.8rem;color:rgba(255,255,255,.4);
+  letter-spacing:1px;
+}
+
+/* ============ COVER SCENE ============ */
+.cover-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.cover-title{
+  font-size:3.5rem;font-weight:bold;letter-spacing:4px;
+  background:linear-gradient(135deg,var(--coral),var(--gold),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:coverTitleIn 1s var(--bounce) .3s both;
+}
+@keyframes coverTitleIn{0%{opacity:0;transform:scale(.5) translateY(50px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+.cover-sub{font-size:1.3rem;color:rgba(255,255,255,.7);letter-spacing:3px;margin-top:.5rem}
+.cover-credit{font-size:.8rem;color:rgba(255,255,255,.3);margin-top:2rem}
+
+/* ============ MEMORIAL SCENE ============ */
+.memorial-img{filter:grayscale(100%) contrast(1.1)}
+.memorial-text{
+  font-size:2rem;letter-spacing:6px;color:#888;
+  transition:all .5s ease;
+}
+.memorial-twist{
+  font-size:3rem;font-weight:bold;letter-spacing:2px;
+  background:linear-gradient(135deg,#FF6B6B,#FFD93D,#4ECDC4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:twistIn .8s var(--bounce) both;
+}
+@keyframes twistIn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+.memorial-twist-text{font-size:1.2rem;color:rgba(255,255,255,.85);line-height:1.8}
+
+/* ============ MESSAGE BOARD ============ */
+.msg-board{width:100%;max-width:600px}
+.msg-input-row{display:flex;gap:.5rem;width:100%;margin-bottom:1rem}
+#msg-input{
+  flex:1;padding:10px 16px;border-radius:24px;
+  background:rgba(255,255,255,.1);color:#fff;
+  border:1px solid rgba(255,255,255,.2);font-size:.95rem;
+}
+#msg-input::placeholder{color:rgba(255,255,255,.4)}
+#msg-input:focus{border-color:rgba(255,255,255,.4)}
+#msg-submit{
+  padding:10px 20px;border-radius:24px;
+  background:var(--teal);color:#1a1a1a;font-weight:bold;
+  font-size:.9rem;transition:all .3s ease;
+}
+#msg-submit:hover{transform:scale(1.05)}
+.msg-list{
+  display:flex;flex-wrap:wrap;gap:.6rem;
+  max-height:45vh;overflow-y:auto;padding:.5rem;
+}
+.msg-list::-webkit-scrollbar{width:4px}
+.msg-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:2px}
+.msg-item{
+  padding:10px 16px;border-radius:12px;
+  font-size:.85rem;line-height:1.5;
+  max-width:280px;word-break:break-word;
+  animation:msgIn .4s var(--bounce) both;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+@keyframes msgIn{0%{opacity:0;transform:scale(.7) translateY(20px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+.msg-author{font-weight:bold;font-size:.8rem;margin-top:4px;opacity:.7}
+
+/* ============ PERSONA GALLERY (ENDING) ============ */
+.persona-gallery{
+  display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;
+  margin-top:1rem;max-width:700px;
+}
+.persona-thumb{
+  position:relative;width:80px;height:80px;border-radius:10px;
+  overflow:hidden;cursor:pointer;transition:transform .3s var(--ease);
+}
+.persona-thumb:hover{transform:scale(1.15) rotate(3deg)}
+.persona-thumb img{width:100%;height:100%;object-fit:cover}
+.persona-thumb .persona-label{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.7);color:#fff;text-align:center;
+  font-size:.65rem;padding:2px;opacity:0;transition:opacity .3s ease;
+}
+.persona-thumb:hover .persona-label{opacity:1}
+
+/* ============ QUOTE GENERATOR ============ */
+.quote-box{
+  margin-top:1rem;padding:14px 20px;border-radius:12px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  font-size:.9rem;color:rgba(255,255,255,.7);text-align:center;
+  min-height:50px;display:flex;align-items:center;justify-content:center;
+  transition:all .3s ease;
+}
+.quote-box .quote-text{font-size:1rem;color:rgba(255,255,255,.85)}
+.btn-quote{
+  margin-top:.5rem;padding:8px 18px;border-radius:20px;
+  background:rgba(255,255,255,.1);color:#fff;font-size:.85rem;
+  border:1px solid rgba(255,255,255,.2);transition:all .3s ease;
+}
+.btn-quote:hover{background:rgba(255,255,255,.2)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:768px){
+  .scene-content{flex-direction:column !important;gap:1.2rem;padding:1rem;width:95%}
+  .scene-image{max-height:35vh}
+  .big-title{font-size:2.2rem}
+  .cover-title{font-size:2.2rem;letter-spacing:2px}
+  .scene-title{font-size:1.5rem}
+  .nav-btn{width:36px;height:36px;font-size:16px}
+  .persona-thumb{width:60px;height:60px}
+  .msg-item{max-width:200px;font-size:.8rem}
+}
+@media (max-width:480px){
+  .big-title{font-size:1.8rem}
+  .cover-title{font-size:1.8rem}
+  .scene-title{font-size:1.2rem}
+  .scene-image{max-height:28vh}
+  .btn{padding:10px 24px;font-size:.9rem}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loading-title">正在准备告别仪式…</div>
+  <div class="loading-sub">王东东的百变人生素材加载中</div>
+  <div class="loading-bar-wrap"><div id="loading-fill"></div></div>
+  <div id="loading-text">0%</div>
+</div>
+
+<!-- SOUND TOGGLE -->
+<button id="sound-toggle" title="音效开关">🔊</button>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"><div id="progress-fill"></div></div>
+
+<!-- SCENES -->
+<div id="scenes-wrapper">
+<div id="scenes-track">
+
+<!-- ===== Scene 0: Cover ===== -->
+<div class="scene scene-center" data-index="0">
+  <div class="cover-particles" id="cover-particles"></div>
+  <div class="scene-content">
+    <div>
+      <h1 class="cover-title">再见，王东东！</h1>
+      <p class="cover-sub">高二十二班 · 集体告别仪式</p>
+    </div>
+    <button class="btn btn-start" onclick="App.next()">开始告别 →</button>
+    <p class="cover-credit">—— 高二十二班全体学生</p>
+    <p style="font-size:.7rem;color:rgba(255,255,255,.25);margin-top:.8rem;letter-spacing:1px">本网页由 AI 生成</p>
+  </div>
+</div>
+
+<!-- ===== Scene 1: Teacher ===== -->
+<div class="scene" data-index="1" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper" id="teacher-img-wrap" onclick="App.revealTeacher()">
+        <img class="scene-image float" src="images/王东东教师.png" alt="王东东教师形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title">你认得这个人吗？</h2>
+      <p class="scene-subtitle" id="teacher-reveal" style="opacity:0;transition:opacity .5s ease">没错！他就是我们高二时的班主任——<b>王东东老师</b>！</p>
+      <p class="scene-desc" id="teacher-desc" style="opacity:0;transition:opacity .5s ease .3s">手捧课本，立于讲台。两袖清风，一身正气。<br>那些被他盯着上早自习的日子，好像就在昨天。</p>
+      <button class="btn btn-next hidden" onclick="App.next()">继续 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 2: Change ===== -->
+<div class="scene scene-center" data-index="2">
+  <div class="scene-content">
+    <div class="scene-text-col" style="align-items:center">
+      <h2 class="big-title" style="font-size:2rem">然而…</h2>
+      <p class="scene-subtitle" style="font-size:1.1rem">高三的脚步近了</p>
+      <p class="scene-subtitle" style="font-size:1.1rem;color:var(--coral)">十二班迎来了新班主任</p>
+      <p class="scene-subtitle" style="font-size:1.1rem">王老师……不再带我们班了</p>
+      <p class="big-subtitle" style="color:var(--gold);margin-top:.5rem">但是！</p>
+      <p class="scene-subtitle" style="font-size:1.1rem">王老师还是我们的老师<br>只是换了一种方式陪伴</p>
+      <button class="btn btn-next" onclick="App.next()">接受现实 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 3: 百变人生 Intro ===== -->
+<div class="scene scene-center" data-index="3">
+  <div class="scene-content">
+    <div class="scene-text-col" style="align-items:center">
+      <h2 class="big-title" style="background:linear-gradient(135deg,#fff,#FFD93D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">百变人生</h2>
+      <p class="scene-subtitle" style="font-size:1.1rem">据说……不当班主任之后</p>
+      <p class="scene-subtitle" style="font-size:1.15rem;color:var(--gold)">王老师开启了百变人生！</p>
+      <p class="scene-desc">让我们来看看他的新职业 →</p>
+      <button class="btn btn-next" onclick="App.next()" style="border-color:rgba(255,255,255,.4)">来看看</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 4: Emperor ===== -->
+<div class="scene" data-index="4" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-emperor" src="images/皇·网洞洞.png" alt="王东东皇帝形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:#FFD93D">职业一：皇帝</h2>
+      <p class="scene-subtitle">王老师当皇帝了？！</p>
+      <p class="scene-subtitle" style="font-size:.95rem;color:rgba(255,255,255,.5)">点击下方按钮，向吾皇行礼</p>
+      <button class="btn btn-interaction" onclick="App.interact(4,this)">跪 拜</button>
+      <p class="reaction-text" id="reaction-4"></p>
+      <p class="fun-fact" id="fact-4">（据说御批作业：准予满分）</p>
+      <button class="btn btn-next hidden" onclick="App.next()">下一个职业 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 5: Chef ===== -->
+<div class="scene" data-index="5" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-chef" src="images/王东东厨师.png" alt="王东东厨师形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:#FF8C00">职业二：大厨</h2>
+      <p class="scene-subtitle">王老师去学厨师了！</p>
+      <p class="scene-subtitle" style="font-size:.95rem;color:rgba(255,255,255,.5)">点击下方按钮，帮王老师翻锅</p>
+      <button class="btn btn-interaction" onclick="App.interact(5,this)">翻 锅</button>
+      <p class="reaction-text" id="reaction-5"></p>
+      <p class="fun-fact" id="fact-5">（据说他炒的蛋炒饭能提高成绩50%）</p>
+      <button class="btn btn-next hidden" onclick="App.next()">下一个职业 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 6: Soldier ===== -->
+<div class="scene" data-index="6" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-soldier" src="images/王东东士兵.png" alt="王东东士兵形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:#8FBC8F">职业三：军人</h2>
+      <p class="scene-subtitle">投笔从戎！保家卫国！</p>
+      <p class="scene-subtitle" style="font-size:.95rem;color:rgba(255,255,255,.5)">点击下方按钮，向王班长敬礼</p>
+      <button class="btn btn-interaction" onclick="App.interact(6,this)">敬 礼</button>
+      <p class="reaction-text" id="reaction-6"></p>
+      <p class="fun-fact" id="fact-6">（据说他的口号声能穿透三层楼）</p>
+      <button class="btn btn-next hidden" onclick="App.next()">下一个职业 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 7: Witch ===== -->
+<div class="scene" data-index="7" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-witch" src="images/王东东女巫.png" alt="王东东魔法师形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:#A855F7">职业四：魔法师</h2>
+      <p class="scene-subtitle">王老师转职了！魔法棒一挥——</p>
+      <p class="scene-subtitle" style="color:var(--purple)">全班都考上985！</p>
+      <p class="scene-subtitle" style="font-size:.95rem;color:rgba(255,255,255,.5)">点击下方按钮，见证魔法</p>
+      <button class="btn btn-interaction" onclick="App.interact(7,this)">施 法</button>
+      <p class="reaction-text" id="reaction-7"></p>
+      <p class="fun-fact" id="fact-7">（据说他的魔杖是粉笔变的）</p>
+      <button class="btn btn-next hidden" onclick="App.next()">下一个职业 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 8: Miner ===== -->
+<div class="scene" data-index="8" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-miner" src="images/王东东矿工.png" alt="王东东矿工形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:#DAA520">职业五：矿工</h2>
+      <p class="scene-subtitle">王老师下矿了！</p>
+      <p class="scene-subtitle">不是——是去挖知识的矿！</p>
+      <p class="scene-subtitle" style="font-size:.95rem;color:rgba(255,255,255,.5)">点击下方按钮，和王老师一起挖矿</p>
+      <button class="btn btn-interaction" onclick="App.interact(8,this)">挖 矿</button>
+      <p class="reaction-text" id="reaction-8"></p>
+      <p class="fun-fact" id="fact-8">（据说他挖到的是高三真题）</p>
+      <button class="btn btn-next hidden" onclick="App.next()">下一个职业 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 9: Pilot ===== -->
+<div class="scene" data-index="9" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-pilot" src="images/王东东飞行员.png" alt="王东东飞行员形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:#87CEEB">职业六：机长</h2>
+      <p class="scene-subtitle">冲上云霄！四道杠机长！</p>
+      <p class="scene-subtitle" style="font-size:.95rem;color:rgba(255,255,255,.5)">点击下方按钮，和王老师一起起飞</p>
+      <button class="btn btn-interaction" onclick="App.interact(9,this)">起 飞</button>
+      <p class="reaction-text" id="reaction-9"></p>
+      <p class="fun-fact" id="fact-9">（据说他开的飞机从不晚点，因为从不起飞）</p>
+      <button class="btn btn-next hidden" onclick="App.next()">下一个职业 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 10: Traveler ===== -->
+<div class="scene" data-index="10" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-traveler" src="images/王东东远行.png" alt="王东东远行形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:#FFB347">职业七：远行者</h2>
+      <p class="scene-subtitle">王老师踏上了远行的旅途</p>
+      <p class="scene-subtitle" style="font-size:.95rem;color:rgba(255,255,255,.5)">点击下方按钮，为王老师送行</p>
+      <button class="btn btn-interaction" onclick="App.interact(10,this)">送 行</button>
+      <p class="reaction-text" id="reaction-10"></p>
+      <p class="fun-fact" id="fact-10">（其实只是从一楼办公室搬到三楼了）</p>
+      <button class="btn btn-next hidden" onclick="App.next()">继续 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 11: Farewell ===== -->
+<div class="scene" data-index="11" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-farewell" src="images/王东东道别.png" alt="王东东道别形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:var(--coral)">再见了，王老师！</h2>
+      <p class="scene-subtitle">感谢您一年的教导</p>
+      <p class="scene-subtitle">虽然您不再是我们班的班主任</p>
+      <p class="scene-subtitle" style="color:var(--gold)">但您永远是我们的王老师</p>
+      <p class="scene-subtitle" style="font-size:.95rem;color:rgba(255,255,255,.5)">点击下方按钮，向王老师挥手告别</p>
+      <button class="btn btn-interaction" onclick="App.interact(11,this)">挥手告别</button>
+      <p class="reaction-text" id="reaction-11"></p>
+      <button class="btn btn-next hidden" onclick="App.next()">继续 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 12: 音容宛在 (twist) ===== -->
+<div class="scene scene-center" data-index="12" id="scene-memorial" data-interactive="true">
+  <div class="scene-content" id="memorial-content">
+    <div class="scene-image-col">
+      <img class="scene-image memorial-img" id="img-memorial" src="images/音容宛在.jpg" alt="音容宛在" loading="lazy" style="max-height:40vh;border-radius:12px">
+    </div>
+    <div class="scene-text-col" style="align-items:center">
+      <p class="memorial-text" id="memorial-text">音容宛在……</p>
+      <div id="memorial-twist-area" style="display:none;flex-direction:column;align-items:center;gap:1rem">
+        <p class="memorial-twist">开玩笑的！！</p>
+        <p class="memorial-twist-text">王老师还在学校呢！</p>
+        <p class="memorial-twist-text">只是不当我们班主任了而已</p>
+        <p class="memorial-twist-text" style="color:var(--gold)">想他了随时可以去办公室找他！</p>
+        <button class="btn btn-next" style="margin-top:1rem" onclick="App.next()">继续 →</button>
+      </div>
+      <button class="btn btn-interaction" id="memorial-btn" onclick="App.triggerTwist()">……？</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 13: Message Board ===== -->
+<div class="scene scene-center" data-index="13">
+  <div class="scene-content">
+    <div class="scene-text-col" style="align-items:center;width:100%">
+      <h2 class="scene-title" style="color:var(--teal)">给王老师留句话吧</h2>
+      <p class="scene-subtitle" style="font-size:.85rem;color:rgba(255,255,255,.45);line-height:1.6">⚠️ 留言只能保存在本机，你见到的其他留言是 AI 写的，并非真实用户</p>
+      <div class="msg-board">
+        <div class="msg-input-row">
+          <input type="text" id="msg-input" placeholder="想说的话…" maxlength="100">
+          <input type="text" id="msg-name" placeholder="署名" maxlength="10" style="width:80px">
+          <button id="msg-submit" onclick="App.addMessage()">留言</button>
+        </div>
+        <div class="msg-list" id="msg-list"></div>
+      </div>
+      <div class="quote-box" id="quote-box">
+        <span class="quote-text" id="quote-text">点击下方按钮，随机抽取一句"王东东名言"</span>
+      </div>
+      <button class="btn btn-quote" onclick="App.generateQuote()">🔀 王东东名言生成器</button>
+      <button class="btn btn-next" onclick="App.next()" style="margin-top:.5rem">继续 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 14: Easter Egg (Boxing) ===== -->
+<div class="scene" data-index="14" data-interactive="true">
+  <div class="scene-content">
+    <div class="scene-image-col">
+      <div class="scene-image-wrapper">
+        <img class="scene-image" id="img-boxing" src="images/网洞洞贴图.jpg" alt="王东东拳击形象" loading="lazy">
+      </div>
+    </div>
+    <div class="scene-text-col">
+      <h2 class="scene-title" style="color:var(--coral)">等等……</h2>
+      <p class="scene-subtitle">王老师还练拳击了？！</p>
+      <p class="scene-subtitle" style="color:var(--gold)">王老师托我转告——</p>
+      <p class="scene-subtitle" style="font-size:1.05rem">高三要是不好好学习</p>
+      <p class="scene-subtitle" style="font-size:1.2rem;color:var(--coral);font-weight:bold">拳击手套伺候！🥊</p>
+      <button class="btn btn-interaction" onclick="App.interact(14,this)">我们一定好好学习！</button>
+      <p class="reaction-text" id="reaction-14"></p>
+      <button class="btn btn-next hidden" onclick="App.next()">继续 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Scene 15: Ending ===== -->
+<div class="scene scene-center" data-index="15">
+  <div class="scene-content">
+    <div class="scene-text-col" style="align-items:center">
+      <h2 class="cover-title" style="font-size:2.5rem">感谢参与告别仪式</h2>
+      <p class="scene-subtitle" style="font-size:1.2rem">王老师，我们高三加油！</p>
+      <p class="big-subtitle" style="color:var(--gold);font-size:1.3rem">十二班，永远的神！</p>
+      <p class="cover-credit">—— 高二十二班全体学生</p>
+      <div class="persona-gallery" id="ending-gallery"></div>
+      <button class="btn btn-restart" onclick="App.restart()" style="margin-top:1rem">从头再看一遍</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /scenes-track -->
+</div><!-- /scenes-wrapper -->
+
+<!-- NAVIGATION -->
+<button id="nav-prev" class="nav-btn hidden" onclick="App.prev()">←</button>
+<button id="nav-next" class="nav-btn" onclick="App.next()">→</button>
+<div id="scene-counter">1 / 16</div>
+
+<script>
+(function(){
+'use strict';
+
+// ============ STATE ============
+var currentScene = 0;
+var totalScenes = 16;
+var completedInteractions = new Set();
+var soundEnabled = true;
+var audioCtx = null;
+var twistTriggered = false;
+
+// ============ DOM ============
+var track = document.getElementById('scenes-track');
+var loadingScreen = document.getElementById('loading-screen');
+var loadingFill = document.getElementById('loading-fill');
+var loadingText = document.getElementById('loading-text');
+var navPrev = document.getElementById('nav-prev');
+var navNext = document.getElementById('nav-next');
+var sceneCounter = document.getElementById('scene-counter');
+var progressFill = document.getElementById('progress-fill');
+var soundToggle = document.getElementById('sound-toggle');
+
+// ============ IMAGE PRELOAD ============
+var imagePaths = [
+  'images/王东东教师.png',
+  'images/王东东厨师.png',
+  'images/王东东士兵.png',
+  'images/王东东女巫.png',
+  'images/王东东矿工.png',
+  'images/王东东远行.png',
+  'images/王东东道别.png',
+  'images/王东东飞行员.png',
+  'images/皇·网洞洞.png',
+  'images/网洞洞贴图.jpg',
+  'images/网洞洞贴图1.jpg',
+  'images/音容宛在.jpg'
+];
+var loadedCount = 0;
+
+function preloadImages(){
+  imagePaths.forEach(function(path){
+    var img = new Image();
+    img.onload = function(){ onImageLoad(); };
+    img.onerror = function(){ onImageLoad(); };
+    img.src = path;
+  });
+}
+function onImageLoad(){
+  loadedCount++;
+  var pct = Math.round(loadedCount / imagePaths.length * 100);
+  loadingFill.style.width = pct + '%';
+  loadingText.textContent = pct + '%';
+  if(loadedCount >= imagePaths.length){
+    setTimeout(function(){
+      loadingScreen.classList.add('hide');
+      initScene(0);
+    }, 300);
+  }
+}
+
+// ============ SCENE MANAGEMENT ============
+function initScene(index){
+  var scenes = document.querySelectorAll('.scene');
+  scenes.forEach(function(s){ s.classList.remove('active'); });
+  var scene = document.querySelector('.scene[data-index="' + index + '"]');
+  if(scene) scene.classList.add('active');
+}
+
+function goToScene(index){
+  if(index < 0 || index >= totalScenes) return;
+  currentScene = index;
+  track.style.transform = 'translateX(-' + (index * 100) + '%)';
+  
+  // update nav
+  navPrev.classList.toggle('hidden', index === 0);
+  navNext.classList.toggle('hidden', index === totalScenes - 1);
+  sceneCounter.textContent = (index + 1) + ' / ' + totalScenes;
+  progressFill.style.width = ((index + 1) / totalScenes * 100) + '%';
+  
+  // reset and set active scene
+  setTimeout(function(){
+    initScene(index);
+    updateNextButtonVisibility(index);
+  }, 100);
+  
+  // special scene handlers
+  if(index === 12){ resetMemorial(); }
+}
+
+function updateNextButtonVisibility(index){
+  var scene = document.querySelector('.scene[data-index="' + index + '"]');
+  if(!scene) return;
+  var isInteractive = scene.getAttribute('data-interactive') === 'true';
+  var nextBtn = scene.querySelector('.btn-next');
+  if(nextBtn && isInteractive){
+    if(completedInteractions.has(index)){
+      nextBtn.classList.remove('hidden');
+    } else {
+      nextBtn.classList.add('hidden');
+    }
+  }
+}
+
+function next(){
+  if(currentScene < totalScenes - 1) goToScene(currentScene + 1);
+}
+function prev(){
+  if(currentScene > 0) goToScene(currentScene - 1);
+}
+
+// ============ TEACHER REVEAL ============
+function revealTeacher(){
+  var wrap = document.getElementById('teacher-img-wrap');
+  var reveal = document.getElementById('teacher-reveal');
+  var desc = document.getElementById('teacher-desc');
+  wrap.classList.add('revealed');
+  wrap.style.cursor = 'default';
+  wrap.onclick = null;
+  reveal.style.opacity = '1';
+  desc.style.opacity = '1';
+  completedInteractions.add(1);
+  playTone(523, 0.15, 'sine', 0.2);
+  setTimeout(function(){ playTone(659, 0.15, 'sine', 0.2); }, 150);
+  setTimeout(function(){ playTone(784, 0.2, 'sine', 0.2); }, 300);
+  // show next button
+  var scene = document.querySelector('.scene[data-index="1"]');
+  var nextBtn = scene.querySelector('.btn-next');
+  nextBtn.classList.remove('hidden');
+  nextBtn.classList.add('appear');
+}
+
+// ============ INTERACTIONS ============
+var interactionData = {
+  4: { // Emperor
+    imgId: 'img-emperor',
+    reaction: '吾皇万岁！万岁！万万岁！',
+    color: '#FFD93D',
+    sound: [{f:196,d:.3,t:'sine'},{f:261,d:.3,t:'sine'},{f:392,d:.5,t:'sine'}],
+    effect: 'gold',
+    emoji: '👑'
+  },
+  5: { // Chef
+    imgId: 'img-chef',
+    reaction: '好香啊！',
+    color: '#FF8C00',
+    sound: [{f:400,d:.1,t:'square'},{f:600,d:.1,t:'square'},{f:800,d:.15,t:'square'}],
+    effect: 'emoji',
+    emojis: ['🍳','🥘','🍚','🥕','🍅','🧄']
+  },
+  6: { // Soldier
+    imgId: 'img-soldier',
+    reaction: '收到！',
+    color: '#8FBC8F',
+    sound: [{f:880,d:.08,t:'square'},{f:440,d:.12,t:'square'}],
+    effect: 'green',
+    emoji: '🎖️'
+  },
+  7: { // Witch
+    imgId: 'img-witch',
+    reaction: '✨ 变！全班都上985！ ✨',
+    color: '#A855F7',
+    sound: [{f:523,d:.1,t:'sine'},{f:659,d:.1,t:'sine'},{f:784,d:.1,t:'sine'},{f:988,d:.3,t:'sine'}],
+    effect: 'magic',
+    emoji: '✨'
+  },
+  8: { // Miner
+    imgId: 'img-miner',
+    reaction: '叮！挖到一颗钻石 💎',
+    color: '#DAA520',
+    sound: [{f:1000,d:.05,t:'square'},{f:500,d:.1,t:'square'},{f:1500,d:.05,t:'sine'}],
+    effect: 'emoji',
+    emojis: ['💎','⛏️','🪨','💰','🔦']
+  },
+  9: { // Pilot
+    imgId: 'img-pilot',
+    reaction: '起飞啦！✈️',
+    color: '#87CEEB',
+    sound: [{f:200,d:.3,t:'sawtooth',v:.15},{f:400,d:.4,t:'sine',v:.2},{f:800,d:.3,t:'sine',v:.15}],
+    effect: 'cloud',
+    emoji: '✈️'
+  },
+  10: { // Traveler
+    imgId: 'img-traveler',
+    reaction: '一路顺风！',
+    color: '#FFB347',
+    sound: [{f:523,d:.15,t:'sine'},{f:659,d:.15,t:'sine'},{f:523,d:.15,t:'sine'},{f:784,d:.3,t:'sine'}],
+    effect: 'hearts',
+    emoji: '🧳'
+  },
+  11: { // Farewell
+    imgId: 'img-farewell',
+    reaction: '再见，王老师！我们会想您的！',
+    color: '#FF6B6B',
+    sound: [{f:523,d:.2,t:'sine'},{f:587,d:.2,t:'sine'},{f:659,d:.2,t:'sine'},{f:523,d:.4,t:'sine'}],
+    effect: 'hearts',
+    emoji: '👋'
+  },
+  14: { // Boxing
+    imgId: 'img-boxing',
+    reaction: '好的王老师！我们一定好好学习！',
+    color: '#FF6B6B',
+    sound: [{f:150,d:.1,t:'square',v:.3},{f:800,d:.1,t:'sine',v:.2}],
+    effect: 'emoji',
+    emojis: ['🥊','📚','✏️','📝','💪']
+  }
+};
+
+function interact(sceneIndex, btn){
+  var data = interactionData[sceneIndex];
+  if(!data) return;
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+  
+  // image animation
+  var img = document.getElementById(data.imgId);
+  if(img){
+    if(sceneIndex === 5) img.classList.add('flip');
+    else if(sceneIndex === 7) img.classList.add('glow');
+    else if(sceneIndex === 9) img.classList.add('fly');
+    else if(sceneIndex === 11) img.classList.add('wave');
+    else img.classList.add('shake');
+    
+    setTimeout(function(){
+      img.classList.remove('shake','flip','glow','fly','wave');
+    }, 1500);
+  }
+  
+  // screen shake for emperor
+  if(sceneIndex === 4){
+    document.body.style.animation = 'imgShake .5s ease';
+    setTimeout(function(){ document.body.style.animation = ''; }, 500);
+  }
+  
+  // sound
+  if(data.sound){
+    data.sound.forEach(function(s, i){
+      setTimeout(function(){
+        playTone(s.f, s.d, s.t || 'sine', s.v || 0.2);
+      }, i * 100);
+    });
+  }
+  
+  // particles
+  createParticles(data.effect, data.emojis || [data.emoji || '✨']);
+  
+  // reaction text
+  var reactionEl = document.getElementById('reaction-' + sceneIndex);
+  if(reactionEl){
+    reactionEl.textContent = data.reaction;
+    reactionEl.style.color = data.color;
+    reactionEl.classList.add('show');
+  }
+  
+  // fun fact
+  var factEl = document.getElementById('fact-' + sceneIndex);
+  if(factEl) factEl.classList.add('show');
+  
+  // mark complete & show next
+  completedInteractions.add(sceneIndex);
+  var scene = document.querySelector('.scene[data-index="' + sceneIndex + '"]');
+  var nextBtn = scene.querySelector('.btn-next');
+  if(nextBtn){
+    setTimeout(function(){
+      nextBtn.classList.remove('hidden');
+      nextBtn.classList.add('appear');
+    }, 800);
+  }
+}
+
+// ============ MEMORIAL TWIST ============
+function resetMemorial(){
+  twistTriggered = false;
+  var memorialText = document.getElementById('memorial-text');
+  var twistArea = document.getElementById('memorial-twist-area');
+  var memorialBtn = document.getElementById('memorial-btn');
+  var scene = document.getElementById('scene-memorial');
+  var img = document.getElementById('img-memorial');
+  twistArea.style.display = 'none';
+  memorialText.style.display = 'block';
+  memorialText.textContent = '音容宛在……';
+  memorialBtn.style.display = 'inline-block';
+  memorialBtn.textContent = '……？';
+  memorialBtn.disabled = false;
+  memorialBtn.style.opacity = '1';
+  scene.classList.remove('twist');
+  img.classList.add('memorial-img');
+  
+  // gradual dimming effect
+  memorialText.style.color = '#888';
+}
+
+function triggerTwist(){
+  if(twistTriggered) return;
+  twistTriggered = true;
+  
+  var memorialText = document.getElementById('memorial-text');
+  var twistArea = document.getElementById('memorial-twist-area');
+  var memorialBtn = document.getElementById('memorial-btn');
+  var scene = document.getElementById('scene-memorial');
+  var img = document.getElementById('img-memorial');
+  
+  // phase 1: "等等..."
+  memorialText.textContent = '等等...';
+  memorialText.style.color = '#aaa';
+  playTone(300, 0.3, 'sine', 0.15);
+  
+  // phase 2: TWIST!
+  setTimeout(function(){
+    memorialText.style.display = 'none';
+    memorialBtn.style.display = 'none';
+    twistArea.style.display = 'flex';
+    scene.classList.add('twist');
+    img.classList.remove('memorial-img');
+    
+    // dramatic sound
+    playTone(880, 0.1, 'square', 0.25);
+    setTimeout(function(){ playTone(1047, 0.1, 'square', 0.25); }, 100);
+    setTimeout(function(){ playTone(1319, 0.2, 'sine', 0.3); }, 200);
+    
+    // confetti!
+    createParticles('confetti');
+    createParticles('emoji', ['🎉','🎊','✨','😄','🙌']);
+    
+    completedInteractions.add(12);
+    updateNextButtonVisibility(12);
+  }, 1200);
+}
+
+// ============ PARTICLES ============
+function createParticles(type, emojis){
+  var container = document.body;
+  var count = type === 'confetti' ? 40 : 20;
+  var colors = {
+    gold: ['#FFD700','#FFA500','#FFEC8B'],
+    green: ['#8FBC8F','#228B22','#90EE90'],
+    magic: ['#A855F7','#C084FC','#E0AAF7','#7C3AED'],
+    cloud: ['#FFFFFF','#E0E0E0','#C0C0C0'],
+    hearts: ['#FF6B6B','#FF9999','#FFB6C1','#FF4757'],
+    confetti: ['#FF6B6B','#4ECDC4','#FFD93D','#A855F7','#FF8C00','#87CEEB']
+  };
+  var colorSet = colors[type] || colors.confetti;
+  
+  for(var i = 0; i < count; i++){
+    var p = document.createElement('div');
+    p.className = 'particle';
+    
+    if(type === 'emoji'){
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)] || '✨';
+      p.style.fontSize = (Math.random() * 20 + 16) + 'px';
+    } else {
+      var size = Math.random() * 16 + 6;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.backgroundColor = colorSet[Math.floor(Math.random() * colorSet.length)];
+      if(type === 'confetti'){
+        p.style.borderRadius = '2px';
+        p.style.width = (Math.random() * 8 + 4) + 'px';
+        p.style.height = (Math.random() * 12 + 6) + 'px';
+      }
+    }
+    
+    var startX = window.innerWidth / 2 + (Math.random() - 0.5) * 300;
+    var startY = window.innerHeight / 2 + (Math.random() - 0.5) * 100;
+    p.style.left = startX + 'px';
+    p.style.top = startY + 'px';
+    p.style.opacity = '1';
+    p.style.transition = 'all ' + (1.2 + Math.random() * 0.8) + 's cubic-bezier(0.25,0.46,0.45,0.94)';
+    
+    container.appendChild(p);
+    
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        p.style.left = (startX + (Math.random() - 0.5) * 600) + 'px';
+        p.style.top = (startY - Math.random() * 400 - 100) + 'px';
+        p.style.opacity = '0';
+        p.style.transform = 'rotate(' + (Math.random() * 720) + 'deg)';
+      });
+    });
+    
+    (function(particle){
+      setTimeout(function(){ particle.remove(); }, 2500);
+    })(p);
+  }
+}
+
+// ============ SOUND ============
+function initAudio(){
+  if(!audioCtx){
+    try{
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }catch(e){ soundEnabled = false; }
+  }
+}
+
+function playTone(freq, duration, type, volume){
+  if(!soundEnabled) return;
+  initAudio();
+  if(!audioCtx) return;
+  try{
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    var vol = volume || 0.2;
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  }catch(e){}
+}
+
+function toggleSound(){
+  soundEnabled = !soundEnabled;
+  soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+  soundToggle.classList.toggle('muted', !soundEnabled);
+  if(soundEnabled) initAudio();
+}
+
+// ============ MESSAGE BOARD ============
+var msgColors = [
+  'rgba(255,107,107,.2)','rgba(78,205,196,.2)','rgba(255,217,61,.2)',
+  'rgba(168,85,247,.2)','rgba(255,140,0,.2)','rgba(135,206,235,.2)'
+];
+
+var defaultMessages = [
+  {text:'王老师，我会想您的！', author:'匿名'},
+  {text:'老师，您教的那些知识点，我...忘得差不多了😭', author:'某学生'},
+  {text:'王老师一定要记得我们十二班！', author:'十二班的一员'},
+  {text:'感谢老师一年的辛勤付出！', author:'全班同学'},
+  {text:'王老师，以后还能来找您问题吗？', author:'好奇宝宝'},
+  {text:'不当班主任了也是我们的王老师！', author:'铁粉'}
+];
+
+function loadMessages(){
+  try{
+    var saved = localStorage.getItem('wang-msg-list');
+    if(saved) return JSON.parse(saved);
+  }catch(e){}
+  return defaultMessages.slice();
+}
+
+function saveMessages(msgs){
+  try{
+    localStorage.setItem('wang-msg-list', JSON.stringify(msgs));
+  }catch(e){}
+}
+
+var messages = loadMessages();
+
+function renderMessages(){
+  var list = document.getElementById('msg-list');
+  list.innerHTML = '';
+  messages.forEach(function(msg, i){
+    var div = document.createElement('div');
+    div.className = 'msg-item';
+    div.style.backgroundColor = msgColors[i % msgColors.length];
+    div.style.borderLeft = '3px solid rgba(255,255,255,.3)';
+    var textSpan = document.createElement('span');
+    textSpan.textContent = msg.text;
+    div.appendChild(textSpan);
+    var authorDiv = document.createElement('div');
+    authorDiv.className = 'msg-author';
+    authorDiv.textContent = '—— ' + msg.author;
+    div.appendChild(authorDiv);
+    list.appendChild(div);
+  });
+}
+
+function escapeHtml(str){
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function addMessage(){
+  var input = document.getElementById('msg-input');
+  var nameInput = document.getElementById('msg-name');
+  var text = input.value.trim();
+  var author = nameInput.value.trim() || '匿名';
+  if(!text) return;
+  messages.unshift({text: text, author: author});
+  if(messages.length > 50) messages = messages.slice(0, 50);
+  saveMessages(messages);
+  renderMessages();
+  input.value = '';
+  nameInput.value = '';
+  playTone(659, 0.1, 'sine', 0.2);
+  setTimeout(function(){ playTone(880, 0.15, 'sine', 0.2); }, 100);
+}
+
+// ============ QUOTE GENERATOR ============
+var quotes = [
+  '你们是我带过最差的一届！',
+  '整个年级就你们班最吵！',
+  '你们看我干什么？看黑板！',
+  '这道题我都讲了三遍了！',
+  '下课来我办公室一趟。',
+  '别以为我看不到你们在下面干什么。',
+  '这节课讲完这道题再下课。',
+  '体育老师今天有事，这节课我来上。',
+  '谁在说话？最后一排那个，对，说的就是你。',
+  '上课不要睡觉！昨晚又熬夜了？',
+  '这道题送分题啊同学们！',
+  '你们看看隔壁班，再看看你们！',
+  '把手机收起来，最后一次警告。',
+  '今天是星期五，再坚持一下，马上就放学了。',
+  '这个问题下课后找我讨论。',
+  '你们现在不吃苦，以后吃苦一辈子！',
+  '来讲这道选择题，A肯定不对，B也排除...',
+  '好，再讲最后一分钟就下课。',
+  '班里的卫生怎么搞的？值日生站起来。',
+  '期中考试成绩出来了，有些人该反思了。'
+];
+
+function generateQuote(){
+  var quote = quotes[Math.floor(Math.random() * quotes.length)];
+  var el = document.getElementById('quote-text');
+  el.style.opacity = '0';
+  setTimeout(function(){
+    el.textContent = '"' + quote + '"';
+    el.style.opacity = '1';
+  }, 200);
+  playTone(440 + Math.random() * 200, 0.1, 'sine', 0.15);
+}
+
+// ============ ENDING GALLERY ============
+function buildEndingGallery(){
+  var gallery = document.getElementById('ending-gallery');
+  var personas = [
+    {src:'images/王东东教师.png', label:'教师'},
+    {src:'images/皇·网洞洞.png', label:'皇帝'},
+    {src:'images/王东东厨师.png', label:'大厨'},
+    {src:'images/王东东士兵.png', label:'军人'},
+    {src:'images/王东东女巫.png', label:'魔法师'},
+    {src:'images/王东东矿工.png', label:'矿工'},
+    {src:'images/王东东飞行员.png', label:'机长'},
+    {src:'images/王东东远行.png', label:'远行者'},
+    {src:'images/王东东道别.png', label:'道别'},
+    {src:'images/网洞洞贴图.jpg', label:'拳击手'},
+    {src:'images/音容宛在.jpg', label:'音容宛在'}
+  ];
+  gallery.innerHTML = '';
+  personas.forEach(function(p){
+    var div = document.createElement('div');
+    div.className = 'persona-thumb';
+    var img = document.createElement('img');
+    img.src = p.src;
+    img.alt = p.label;
+    img.loading = 'lazy';
+    var label = document.createElement('span');
+    label.className = 'persona-label';
+    label.textContent = p.label;
+    div.appendChild(img);
+    div.appendChild(label);
+    gallery.appendChild(div);
+  });
+}
+
+// ============ COVER PARTICLES ============
+function buildCoverParticles(){
+  var container = document.getElementById('cover-particles');
+  for(var i = 0; i < 20; i++){
+    var p = document.createElement('div');
+    p.className = 'bg-particle';
+    var size = Math.random() * 8 + 3;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    container.appendChild(p);
+  }
+}
+
+// ============ RESTART ============
+function restart(){
+  completedInteractions.clear();
+  twistTriggered = false;
+  // reset teacher scene
+  var teacherWrap = document.getElementById('teacher-img-wrap');
+  teacherWrap.classList.remove('revealed');
+  teacherWrap.style.cursor = 'pointer';
+  teacherWrap.onclick = function(){ App.revealTeacher(); };
+  document.getElementById('teacher-reveal').style.opacity = '0';
+  document.getElementById('teacher-desc').style.opacity = '0';
+  
+  // reset all interaction scenes
+  for(var i = 4; i <= 14; i++){
+    if(i === 12 || i === 13 || i === 15) continue;
+    var scene = document.querySelector('.scene[data-index="' + i + '"]');
+    if(!scene) continue;
+    var btn = scene.querySelector('.btn-interaction');
+    if(btn){ btn.disabled = false; btn.style.opacity = '1'; }
+    var reaction = document.getElementById('reaction-' + i);
+    if(reaction){ reaction.classList.remove('show'); reaction.textContent = ''; }
+    var fact = document.getElementById('fact-' + i);
+    if(fact) fact.classList.remove('show');
+    var nextBtn = scene.querySelector('.btn-next');
+    if(nextBtn){ nextBtn.classList.add('hidden'); }
+  }
+  
+  // reset memorial
+  resetMemorial();
+  
+  goToScene(0);
+}
+
+// ============ KEYBOARD & TOUCH ============
+function setupEvents(){
+  // keyboard
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter'){
+      if(document.activeElement.tagName === 'INPUT') return;
+      e.preventDefault();
+      next();
+    } else if(e.key === 'ArrowLeft'){
+      e.preventDefault();
+      prev();
+    }
+  });
+  
+  // touch
+  var touchStartX = 0;
+  var touchEndX = 0;
+  track.addEventListener('touchstart', function(e){
+    touchStartX = e.touches[0].clientX;
+  }, {passive: true});
+  track.addEventListener('touchend', function(e){
+    touchEndX = e.changedTouches[0].clientX;
+    var diff = touchStartX - touchEndX;
+    if(Math.abs(diff) > 50){
+      if(diff > 0) next();
+      else prev();
+    }
+  }, {passive: true});
+  
+  // sound toggle
+  soundToggle.addEventListener('click', toggleSound);
+  
+  // message input enter
+  var msgInput = document.getElementById('msg-input');
+  msgInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter') addMessage();
+  });
+  var msgName = document.getElementById('msg-name');
+  msgName.addEventListener('keydown', function(e){
+    if(e.key === 'Enter') addMessage();
+  });
+}
+
+// ============ INIT ============
+function init(){
+  buildCoverParticles();
+  buildEndingGallery();
+  renderMessages();
+  setupEvents();
+  preloadImages();
+}
+
+// ============ EXPORT ============
+window.App = {
+  next: next,
+  prev: prev,
+  revealTeacher: revealTeacher,
+  interact: interact,
+  triggerTwist: triggerTwist,
+  addMessage: addMessage,
+  generateQuote: generateQuote,
+  restart: restart
+};
+
+// start
+init();
+
+})();
+</script>
+</body>
+</html>
